@@ -1,0 +1,16 @@
+
+module even_parity_encoder_tb;
+
+reg [3:0] data;
+wire parity;
+
+even_parity_encoder uut (.data(data),.parity(parity));
+initial begin
+data = 0;
+end
+always #10 data = data + 1;
+initial begin
+#100 
+$finish;
+end
+endmodule
