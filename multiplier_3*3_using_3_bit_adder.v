@@ -4,6 +4,7 @@ input [2:0] ;
 output [2:0] ;
 output cout;
 assign {cout, sum} = a + b;
+endmodule
 module multiplier_3x3(a,b,pr)
 input [2:0] ;
 input [2:0] ;
