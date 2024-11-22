@@ -1,42 +1,29 @@
+`timescale 1ns / 1ps
 
-module clock_generator(
-    output reg clk
+module clock_30 (
+    input clk_in,
+    input rst,
+    output reg clk_out
 );
+    reg [3:0] clk_counter; // 4-bit counter
 
-parameter CLK_FREQ = 100e6;
-parameter DUTY_CYCLE = 30; 
-parameter CLK_PERIOD = 1000000000 / CLK_FREQ; 
-  parameter CLK_HIGH_TIME = (CLK_PERIOD * DUTY_CYCLE) / 100; 
+    always @(posedge clk_in or posedge rst) begin
+        if (rst) begin
+            clk_out <= 0;          // Reset clock output
+            clk_counter <= 0;      // Reset counter
+        end else begin
+            if (clk_counter < 4'd9) begin
+                clk_counter <= clk_counter + 1; // Increment counter
+            end else begin
+                clk_counter <= 0; // Reset counter when it reaches 10
+            end
 
-reg [31:0] counter;
-
-initial begin
-    counter = 0;
-    clk = 0;
-end
-
-always #(CLK_HIGH_TIME) clk = 1;
-always #(CLK_PERIOD - CLK_HIGH_TIME) clk = 0;
-
-endmodule
-
-module rising_edge_counter(
-    input clk,
-    output reg [31:0] count
-);
-
-reg old_clk;
-
-initial begin
-    count = 0;
-    old_clk = 0;
-end
-
-always @(posedge clk) begin
-    if (old_clk == 0) begin
-        count <= count + 1;
+            // Generate 30% duty cycle
+            if (clk_counter < 4'd3) begin
+                clk_out <= 1;      // Output high for 3 counts
+            end else begin
+                clk_out <= 0;      // Output low for 7 counts
+            end
+        end
     end
-    old_clk <= clk;
-end
-
 endmodule
