@@ -1,1 +1,21 @@
 
+module clock_generator_tb;
+reg clk;
+wire [31:0] count;
+
+clock_generator uut0 (
+    .clk(clk)
+);
+
+rising_edge_counter uut1 (
+    .clk(clk),
+    .count(count)
+);
+
+initial begin
+    #5000000000 // 5 seconds
+    $display("Number of rising edges: %d", count);
+    $finish;
+end
+
+endmodule
