@@ -1,21 +1,45 @@
+`timescale 1ns / 1ps
 
-module clock_generator_tb;
-reg clk;
-wire [31:0] count;
+module clock_30_tb;
 
-clock_generator uut0 (
-    .clk(clk)
-);
+    reg clk_in;
+    reg rst;
+    wire clk_out;
 
-rising_edge_counter uut1 (
-    .clk(clk),
-    .count(count)
-);
+    // Instantiate the Device Under Test (DUT)
+    clock_30 uut (
+        .clk_in(clk_in),
+        .rst(rst),
+        .clk_out(clk_out)
+    );
 
-initial begin
-    #5000000000 // 5 seconds
-    $display("Number of rising edges: %d", count);
-    $finish;
-end
+    // Clock generation
+    initial begin
+        clk_in = 0;
+        forever #5 clk_in = ~clk_in; // Clock period of 10ns (100MHz clock)
+    end
+
+    // Test stimulus
+    initial begin
+        // Apply reset
+        rst = 1;
+        #10; // Wait for 10ns
+        rst = 0; // Release reset
+
+        // Run the simulation for some time
+        #100;
+
+        // Re-apply reset during operatio
+
+        // Run the simulation for some time
+        #100;
+
+        $finish; // End simulation
+    end
+
+    // Monitor the signals
+    initial begin
+        $monitor("Time: %0dns, clk_in: %b, rst: %b, clk_out: %b", $time, clk_in, rst, clk_out);
+    end
 
 endmodule
