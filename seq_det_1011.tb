@@ -1,0 +1,20 @@
+module seq_det_tb;
+reg x,clk,reset;
+wire z;
+seq_det_1011 sdt(.x(x),.clk(clk),.reset(reset),.z(z));
+initial
+clk=0
+always #5 clk~=clk
+initial
+begin
+reset=1;
+x=0;
+#5 x=1;
+#10 reset=0;
+#10 x=0;
+#10 x=1;
+#10 x=0;
+#10
+$finish
+end 
+endmodule
